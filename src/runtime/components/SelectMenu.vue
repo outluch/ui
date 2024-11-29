@@ -306,7 +306,7 @@ function onUpdateOpen(value: boolean) {
     :name="name"
     :disabled="disabled"
     :display-value="() => searchTerm"
-    :filter-function="() => rootItems"
+    :filter-function="filter ? () => rootItems : undefined"
     @update:model-value="onUpdate"
     @update:open="onUpdateOpen"
   >

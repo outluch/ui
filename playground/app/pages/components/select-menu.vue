@@ -45,6 +45,14 @@ const { data: users, status } = await useFetch('https://jsonplaceholder.typicode
   },
   lazy: true
 })
+
+const rawUsers = computed(() => users.value?.map(user => ({
+  id: user.id,
+  name: user.label,
+  avatar: user.avatar
+})))
+
+const selectedRawUser = ref()
 </script>
 
 <template>
@@ -128,6 +136,28 @@ const { data: users, status } = await useFetch('https://jsonplaceholder.typicode
         icon="i-lucide-user"
         placeholder="Search users..."
         :size="size"
+        class="w-48"
+        value-key="id"
+        @update:open="searchTerm = ''"
+      >
+        <template #leading="{ modelValue, ui }">
+          <UAvatar v-if="modelValue?.avatar" :size="ui.itemLeadingAvatarSize()" v-bind="modelValue.avatar" />
+        </template>
+      </USelectMenu>
+    </div>
+
+    <!-- Custom items example -->
+    <div class="flex items-center gap-4">
+      <USelectMenu
+        v-model="selectedRawUser"
+        v-model:search-term="searchTerm"
+        :items="rawUsers || []"
+        value-key="id"
+        label-key="name"
+        :loading="status === 'pending'"
+        :filter="false"
+        icon="i-lucide-user"
+        placeholder="Search raw users..."
         class="w-48"
         @update:open="searchTerm = ''"
       >
